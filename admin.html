@@ -31,7 +31,31 @@ button.secondary{background:#64748b}button.danger{background:#dc2626}button.succ
 .empty{text-align:center;color:var(--muted);padding:22px}.hidden{display:none!important}
 .modal{position:fixed;inset:0;background:#02061799;display:none;align-items:center;justify-content:center;padding:15px;z-index:30}.modal.show{display:flex}.modal-box{background:var(--panel);color:var(--text);width:min(650px,100%);max-height:90vh;overflow:auto;border-radius:15px;padding:20px;box-shadow:0 20px 70px #0005}
 .modal-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}.modal-head h2{margin:0}.close{background:transparent;color:var(--text);font-size:22px;padding:0 8px}
-#authScreen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:var(--bg)}.auth-card{width:min(430px,100%);background:var(--panel);padding:28px;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}.auth-card h1{margin:0 0 5px}.auth-card p{color:var(--muted)}
+#authScreen{min-height:100vh;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(390px,.95fr);background:#f5f7fc;overflow:hidden}
+.auth-visual{position:relative;display:flex;flex-direction:column;justify-content:space-between;min-height:100vh;padding:clamp(32px,6vw,76px);color:#fff;background:radial-gradient(circle at 18% 20%,#3b82f655,transparent 32%),linear-gradient(145deg,#101d45 0%,#173b83 54%,#2563eb 100%)}
+.auth-visual:after{content:"";position:absolute;width:440px;height:440px;border:1px solid #ffffff20;border-radius:50%;right:-160px;bottom:-190px;box-shadow:0 0 0 48px #ffffff08,0 0 0 96px #ffffff06}
+.auth-brand{position:relative;z-index:1;display:flex;align-items:center;gap:13px}.auth-logo{width:48px;height:48px;display:grid;place-items:center;border-radius:15px;background:#ffffff1c;border:1px solid #ffffff35;font-size:25px}.auth-brand strong{display:block;font-size:19px;letter-spacing:.01em}.auth-brand small{color:#dbeafe}
+.auth-hero{position:relative;z-index:1;max-width:570px;margin:45px 0}.auth-hero .eyebrow{font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#bfdbfe}.auth-hero h2{font-size:clamp(34px,4.2vw,57px);line-height:1.08;letter-spacing:-.04em;margin:18px 0}.auth-hero p{font-size:16px;line-height:1.8;color:#dbeafe;max-width:470px}.auth-points{display:grid;gap:13px;margin-top:30px}.auth-point{display:flex;align-items:center;gap:11px;color:#eff6ff;font-size:14px}.auth-check{width:25px;height:25px;border-radius:50%;display:grid;place-items:center;background:#ffffff20;color:#bfdbfe}
+.auth-foot{position:relative;z-index:1;color:#bfdbfe;font-size:12px}
+.auth-panel{display:flex;align-items:center;justify-content:center;padding:clamp(24px,5vw,70px);background:#f8fafc}.auth-card{width:min(430px,100%);background:#fff;padding:clamp(26px,4vw,42px);border:1px solid #e5eaf3;border-radius:22px;box-shadow:0 24px 70px #14244a12;color:#172033}.auth-card h1{font-size:27px;letter-spacing:-.03em;margin:0 0 8px;color:#14213d}.auth-card .auth-subtitle{color:#64748b;margin:0 0 28px;line-height:1.65;font-size:14px}.auth-card label{display:block;font-size:13px;font-weight:700;color:#334155;margin:15px 0 6px}.auth-card input{background:#f8fafc;border:1px solid #dbe3ef;padding:13px 14px;border-radius:10px;color:#172033}.auth-card input:focus{outline:3px solid #2563eb20;border-color:#2563eb}.auth-password-wrap{position:relative}.auth-password-wrap input{padding-right:62px}.auth-eye{position:absolute;right:8px;top:8px;margin:0;padding:7px 9px;background:transparent;color:#64748b;font-size:12px}.auth-submit{width:100%;margin:22px 0 0;padding:13px;border-radius:10px;background:linear-gradient(110deg,#1d4ed8,#2563eb);box-shadow:0 8px 18px #2563eb30;font-size:15px}.auth-card .notice{background:#f1f5f9;border:1px solid #e2e8f0;color:#64748b;font-size:11px;line-height:1.6;margin:22px 0 0}
+.auth-theme{position:absolute;right:24px;top:22px;z-index:3;border:1px solid #dbe3ef;background:#fff;color:#334155;border-radius:999px;padding:9px 13px;font-size:12px}
+.auth-panel{position:relative}
+[data-theme="dark"] #authScreen{background:#0b1220}
+[data-theme="dark"] .auth-panel{background:#0b1220}
+[data-theme="dark"] .auth-card{background:#111c2e;border-color:#26364d;color:#e5edf8;box-shadow:0 24px 70px #0005}
+[data-theme="dark"] .auth-card h1{color:#f1f5f9}
+[data-theme="dark"] .auth-card .auth-subtitle{color:#a9b8ce}
+[data-theme="dark"] .auth-card label{color:#d5dfed}
+[data-theme="dark"] .auth-card input{background:#0b1628;border-color:#33445e;color:#f1f5f9}
+[data-theme="dark"] .auth-card input::placeholder{color:#8293ac}
+[data-theme="dark"] .auth-card .notice{background:#17263b;border-color:#30435e;color:#a9b8ce}
+[data-theme="dark"] .auth-theme{background:#17263b;color:#e5edf8;border-color:#40516b}
+.auth-secure{display:flex;justify-content:center;gap:7px;align-items:center;margin-top:18px;color:#94a3b8;font-size:11px}
+.dashboard-welcome{padding:25px 26px;border-radius:16px;margin-bottom:16px;color:white;background:radial-gradient(circle at 90% 10%,#ffffff30,transparent 28%),linear-gradient(115deg,#172554,#1d4ed8 65%,#3b82f6);box-shadow:0 12px 30px #1d4ed826}
+.dashboard-welcome h2{font-size:24px;margin:0 0 5px;color:white}.dashboard-welcome p{margin:0;color:#dbeafe;font-size:14px}
+
+@media(max-width:850px){#authScreen{grid-template-columns:1fr}.auth-visual{min-height:auto;padding:25px 28px}.auth-hero{margin:35px 0 25px}.auth-hero h2{font-size:36px}.auth-points{display:none}.auth-foot{display:none}.auth-panel{padding:28px 18px;min-height:55vh}}
+@media(max-width:480px){.auth-visual{padding:20px}.auth-hero{margin:27px 0 5px}.auth-hero h2{font-size:31px}.auth-hero p{font-size:14px}.auth-panel{padding:20px 14px}.auth-card{padding:25px 21px;border-radius:17px}}
 footer{text-align:center;color:var(--muted);font-size:12px;padding:15px}
 @media(max-width:800px){main{grid-template-columns:185px minmax(0,1fr);gap:12px;padding:12px}.nav{top:10px}.nav button{padding:10px;font-size:13px}}
 @media(max-width:600px){header{padding:16px}.brand h1{font-size:21px}main{display:block;padding:12px}.nav{position:relative;top:auto;max-height:none;flex-direction:row;overflow-x:auto;overflow-y:hidden;margin:0 0 14px;padding:7px;gap:6px}.nav-label{display:none}.nav button{width:auto;flex:0 0 auto;white-space:nowrap;padding:9px 12px}.card{padding:14px}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.stat strong{font-size:19px}}
@@ -40,15 +64,33 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:15px}
 </head>
 <body>
 <div id="authScreen">
- <div class="auth-card">
-  <h1>🔐 The Jayguru Hub</h1><p id="authIntro">Set an admin password to protect this dashboard on this device.</p>
-  <form id="authForm">
-   <label id="passwordLabel" for="authPassword">Create password</label>
-   <input id="authPassword" type="password" minlength="6" autocomplete="current-password" required placeholder="At least 6 characters">
-   <div id="confirmWrap"><label for="authConfirm">Confirm password</label><input id="authConfirm" type="password" minlength="6" autocomplete="new-password" placeholder="Re-enter password"></div>
-   <button type="submit" style="width:100%;margin-top:12px" id="authSubmit">Set Password</button>
-  </form>
-  <p class="notice">This is local device-level protection, not server-grade security. Anyone with browser developer tools or access to this device may be able to inspect locally stored data.</p>
+ <aside class="auth-visual">
+  <div class="auth-brand"><div class="auth-logo">J</div><div><strong>The Jayguru Hub</strong><small>STAFF & BUSINESS MANAGEMENT</small></div></div>
+  <div class="auth-hero">
+   <div class="eyebrow">One workspace. Complete control.</div>
+   <h2>Manage your business with clarity.</h2>
+   <p>Keep staff records, daily salaries, attendance and business transactions organized in one simple dashboard.</p>
+   <div class="auth-points"><div class="auth-point"><span class="auth-check">✓</span> Staff and salary management</div><div class="auth-point"><span class="auth-check">✓</span> Attendance and payment tracking</div><div class="auth-point"><span class="auth-check">✓</span> Reports, records and data backup</div></div>
+  </div>
+  <div class="auth-foot">© <span id="authYear"></span> The Jayguru Hub · Private workspace</div>
+ </aside>
+ <div class="auth-panel">
+  <button class="auth-theme" type="button" id="authThemeBtn" onclick="toggleAuthTheme()">🌙 Dark mode</button>
+  <div class="auth-card">
+   <div style="font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#2563eb;margin-bottom:13px">ADMIN ACCESS</div>
+   <h1 id="authHeading">Welcome back</h1>
+   <p class="auth-subtitle" id="authIntro">Sign in to securely access your management dashboard.</p>
+   <form id="authForm">
+    <label for="adminId">Admin ID</label>
+    <div class="auth-id-wrap"><input id="adminId" type="text" autocomplete="username" required maxlength="40" placeholder="Create your Admin ID (e.g. admin)"></div>
+    <label id="passwordLabel" for="authPassword">Admin password</label>
+    <div class="auth-password-wrap"><input id="authPassword" type="password" minlength="6" autocomplete="current-password" required placeholder="Enter your password"><button class="auth-eye" type="button" onclick="toggleAuthPassword('authPassword',this)">Show</button></div>
+    <div id="confirmWrap"><label for="authConfirm">Confirm password</label><div class="auth-password-wrap"><input id="authConfirm" type="password" minlength="6" autocomplete="new-password" placeholder="Re-enter your password"><button class="auth-eye" type="button" onclick="toggleAuthPassword('authConfirm',this)">Show</button></div></div>
+    <button type="submit" class="auth-submit" id="authSubmit">Sign in to dashboard</button>
+   </form>
+   <p class="notice">Your password protects this dashboard on this device. This is local device-level protection, not server-grade security; it does not protect data from someone with access to browser developer tools or this device.</p>
+   <div class="auth-secure">▣ &nbsp; Local device protection &nbsp; · &nbsp; Your records stay in this browser</div>
+  </div>
  </div>
 </div>
 <div id="app" class="hidden">
@@ -67,6 +109,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:15px}
  </nav>
  <div class="content-area">
  <section id="dashboard" class="section active">
+  <div class="dashboard-welcome"><div><div class="welcome-tag">✦ &nbsp; ADMIN WORKSPACE</div><h2 id="dashboardGreeting">Welcome to Jayguru Hub</h2><p>Your business overview, staff operations and daily records — all in one place.</p></div><div class="welcome-side" aria-hidden="true">✧</div></div>
   <div class="stats">
    <div class="stat"><span>Total staff</span><strong id="dashStaff">0</strong></div><div class="stat"><span>Today's salary</span><strong id="dashTodaySalary">₹0</strong></div><div class="stat"><span>Month paid</span><strong id="dashPaid">₹0</strong></div><div class="stat"><span>Month outstanding</span><strong id="dashDue">₹0</strong></div><div class="stat"><span>Today's shop income</span><strong id="dashIncome">₹0</strong></div><div class="stat"><span>Today's expenses</span><strong id="dashExpense">₹0</strong></div>
   </div>
@@ -118,7 +161,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:15px}
 
 <script>
 "use strict";
-const KEY="jayguru_staff_salary_v1", EXTRA="jayguru_hub_extra_v2", AUTH="jayguru_hub_auth_v1", THEME="jayguru_hub_theme";
+const KEY="jayguru_staff_salary_v1", EXTRA="jayguru_hub_extra_v2", AUTH="jayguru_hub_auth_v1", ADMIN_ID="jayguru_hub_admin_id_v1", THEME="jayguru_hub_theme";
 const $=id=>document.getElementById(id), money=n=>"₹"+Number(n||0).toLocaleString("en-IN",{minimumFractionDigits:0,maximumFractionDigits:2});
 const today=()=>{const d=new Date();return [d.getFullYear(),String(d.getMonth()+1).padStart(2,"0"),String(d.getDate()).padStart(2,"0")].join("-")};
 const monthNow=()=>today().slice(0,7);
@@ -135,7 +178,7 @@ function setSelect(id,items,first){const el=$(id),old=el.value;el.innerHTML=`<op
 function activeStaff(){return db.staff.filter(s=>s.status!=="Inactive")}
 function showTab(tab){document.querySelectorAll(".section").forEach(s=>s.classList.toggle("active",s.id===tab));document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.tab===tab));if(tab==="reports")renderReports();if(tab==="ledger")renderLedger();}
 $("nav").addEventListener("click",e=>{const b=e.target.closest("button[data-tab]");if(b)showTab(b.dataset.tab)});
-function renderAll(){setSelect("salaryStaff",activeStaff(),"Select staff");setSelect("salaryStaffFilter",db.staff,"All staff");setSelect("ledgerStaff",db.staff,"Select staff");setSelect("attStaff",activeStaff(),"Select staff");setSelect("attStaffFilter",db.staff,"All staff");renderDashboard();renderStaff();renderSalary();renderLedger();renderAttendance();renderTransactions();renderReports();}
+function renderAll(){if($("dashboardGreeting"))$("dashboardGreeting").textContent="Welcome back, "+(localStorage.getItem(ADMIN_ID)||"Admin");setSelect("salaryStaff",activeStaff(),"Select staff");setSelect("salaryStaffFilter",db.staff,"All staff");setSelect("ledgerStaff",db.staff,"Select staff");setSelect("attStaff",activeStaff(),"Select staff");setSelect("attStaffFilter",db.staff,"All staff");renderDashboard();renderStaff();renderSalary();renderLedger();renderAttendance();renderTransactions();renderReports();}
 function sum(a,fn){return a.reduce((t,x)=>t+fn(x),0)}
 function renderDashboard(){const m=monthNow(),t=today(),ps=db.payments.filter(p=>(p.date||"").startsWith(m)),todayP=db.payments.filter(p=>p.date===t),tx=extra.transactions.filter(x=>x.date===t);$("dashStaff").textContent=activeStaff().length;$("dashTodaySalary").textContent=money(sum(todayP,net));$("dashPaid").textContent=money(sum(ps.filter(p=>p.status==="Paid"),net));$("dashDue").textContent=money(sum(ps.filter(p=>p.status!=="Paid"),net));$("dashIncome").textContent=money(sum(tx.filter(x=>x.type==="Income"),x=>Number(x.amount)));$("dashExpense").textContent=money(sum(tx.filter(x=>x.type==="Expense"),x=>Number(x.amount)));const recent=[...db.payments].sort((a,b)=>(b.date||"").localeCompare(a.date||"")).slice(0,8);$("recentRows").innerHTML=recent.length?recent.map(p=>`<tr><td>${esc(p.date)}</td><td>${esc(p.staffName||staffById(p.staffId)?.name||"Unknown")}</td><td>${money(net(p))}</td><td class="${p.status==="Paid"?"paid":"unpaid"}">${esc(p.status||"Unpaid")}</td></tr>`).join(""):`<tr><td colspan="4" class="empty">No salary entries yet</td></tr>`;}
 function saveStaff(){const id=$("staffEditId").value,name=$("staffName").value.trim(),phone=$("staffPhone").value.trim();if(!name){alert("Enter staff name.");return}if(!phone){alert("Enter mobile number.");return}if(!/^[+()0-9\s-]{7,20}$/.test(phone)){alert("Enter a valid mobile number.");return}const duplicate=db.staff.find(s=>s.phone===phone&&String(s.id)!==id);if(duplicate&&!confirm("Another staff member has this mobile number. Save anyway?"))return;
@@ -174,16 +217,19 @@ function downloadCSV(rows,name){const csv=rows.map(r=>r.map(v=>'"'+String(v??"")
 function backupData(){const payload={app:"The Jayguru Hub",version:2,exportedAt:new Date().toISOString(),legacy:db,extra,theme:localStorage.getItem(THEME)||"light"};const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="Jayguru-Hub-Backup-"+today()+".json";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
 function restoreData(e){const file=e.target.files[0];if(!file)return;if(!confirm("Restore this backup? Current staff, salary, attendance and transaction records will be replaced.")){e.target.value="";return}const reader=new FileReader();reader.onload=()=>{try{const x=JSON.parse(reader.result),legacy=x.legacy||x;if(!Array.isArray(legacy.staff)||!Array.isArray(legacy.payments))throw Error("Invalid backup format");db={staff:legacy.staff,payments:legacy.payments};extra={attendance:Array.isArray(x.extra?.attendance)?x.extra.attendance:[],transactions:Array.isArray(x.extra?.transactions)?x.extra.transactions:[]};persist();alert("Backup restored successfully.");}catch(err){alert("Restore failed: "+err.message)}e.target.value="";};reader.onerror=()=>alert("Could not read backup file.");reader.readAsText(file);}
 function clearAllData(){if(!confirm("This permanently deletes ALL Jayguru Hub data from this browser. Continue?"))return;if(!confirm("Final confirmation: download a backup first if you may need these records."))return;localStorage.removeItem(KEY);localStorage.removeItem(EXTRA);loadData();persist();alert("App records cleared.");}
-function toggleTheme(){const next=document.documentElement.dataset.theme==="dark"?"light":"dark";document.documentElement.dataset.theme=next;localStorage.setItem(THEME,next);$("themeBtn").textContent=next==="dark"?"☀ Light mode":"🌙 Dark mode";}
-function applyTheme(){const t=localStorage.getItem(THEME)||"light";document.documentElement.dataset.theme=t;$("themeBtn").textContent=t==="dark"?"☀ Light mode":"🌙 Dark mode";}
+function toggleTheme(){const next=document.documentElement.dataset.theme==="dark"?"light":"dark";document.documentElement.dataset.theme=next;localStorage.setItem(THEME,next);updateAuthThemeButton();}
+function applyTheme(){const t=localStorage.getItem(THEME)||"light";document.documentElement.dataset.theme=t;updateAuthThemeButton();}
 async function hashPassword(p){const bytes=new TextEncoder().encode(p),digest=await crypto.subtle.digest("SHA-256",bytes);return Array.from(new Uint8Array(digest)).map(b=>b.toString(16).padStart(2,"0")).join("");}
-function authSetup(){const exists=!!localStorage.getItem(AUTH);$("authIntro").textContent=exists?"Enter your admin password to unlock the dashboard.":"Set an admin password to protect this dashboard on this device.";$("passwordLabel").textContent=exists?"Admin password":"Create password";$("authSubmit").textContent=exists?"Unlock dashboard":"Set password";$("confirmWrap").classList.toggle("hidden",exists);$("authConfirm").required=!exists;}
-$("authForm").addEventListener("submit",async e=>{e.preventDefault();const p=$("authPassword").value;if(p.length<6){alert("Password must be at least 6 characters.");return}const saved=localStorage.getItem(AUTH);if(saved){if(await hashPassword(p)!==saved){alert("Incorrect password.");return}}else{if(p!==$("authConfirm").value){alert("Passwords do not match.");return}localStorage.setItem(AUTH,await hashPassword(p));}unlockApp();});
+function authSetup(){const exists=!!localStorage.getItem(AUTH);const idField=$("adminId");$("authIntro").textContent=exists?"Enter your Admin ID and password to continue to your management workspace.":"Create your Admin ID and password to secure your private dashboard.";$("authHeading").textContent=exists?"Welcome back":"Create admin access";$("passwordLabel").textContent=exists?"Admin password":"Create password";$("authPassword").placeholder=exists?"Enter your password":"Create a password (minimum 6 characters)";$("authSubmit").textContent=exists?"Sign in to dashboard":"Create admin account";$("confirmWrap").classList.toggle("hidden",exists);$("authConfirm").required=!exists;idField.value=exists?(localStorage.getItem(ADMIN_ID)||"admin"):"";idField.readOnly=exists&&!!localStorage.getItem(ADMIN_ID);idField.placeholder=exists?"Enter your Admin ID":"Create an Admin ID (e.g. admin)";}
+function toggleAuthPassword(id,button){const field=$(id);const show=field.type==="password";field.type=show?"text":"password";button.textContent=show?"Hide":"Show";}
+function toggleAuthTheme(){const next=document.documentElement.dataset.theme==="dark"?"light":"dark";document.documentElement.dataset.theme=next;localStorage.setItem(THEME,next);updateAuthThemeButton();}
+function updateAuthThemeButton(){const dark=document.documentElement.dataset.theme==="dark";const label=dark?"☀ Light mode":"🌙 Dark mode";if($("authThemeBtn"))$("authThemeBtn").textContent=label;if($("themeBtn"))$("themeBtn").textContent=label;}
+$("authForm").addEventListener("submit",async e=>{e.preventDefault();const id=$("adminId").value.trim(),p=$("authPassword").value;if(!id){alert("Enter your Admin ID.");return}if(p.length<6){alert("Password must be at least 6 characters.");return}const saved=localStorage.getItem(AUTH);if(saved){const expectedId=localStorage.getItem(ADMIN_ID)||"admin";if(id.toLowerCase()!==expectedId.toLowerCase()){alert("Incorrect Admin ID.");return}if(await hashPassword(p)!==saved){alert("Incorrect password.");return}if(!localStorage.getItem(ADMIN_ID))localStorage.setItem(ADMIN_ID,expectedId);}else{if(p!==$("authConfirm").value){alert("Passwords do not match.");return}localStorage.setItem(ADMIN_ID,id);localStorage.setItem(AUTH,await hashPassword(p));}unlockApp();});
 function unlockApp(){$("authScreen").classList.add("hidden");$("app").classList.remove("hidden");$("authPassword").value="";$("authConfirm").value="";loadData();applyTheme();renderAll();}
 function lockApp(){$("app").classList.add("hidden");$("authScreen").classList.remove("hidden");authSetup();}
 async function changePassword(){const old=$("oldPassword").value,n=$("newPassword").value,n2=$("newPassword2").value;if(!old||!n){alert("Enter current and new password.");return}if(await hashPassword(old)!==localStorage.getItem(AUTH)){alert("Current password is incorrect.");return}if(n.length<6){alert("New password must be at least 6 characters.");return}if(n!==n2){alert("New passwords do not match.");return}localStorage.setItem(AUTH,await hashPassword(n));$("oldPassword").value=$("newPassword").value=$("newPassword2").value="";alert("Password changed.");}
 $("salaryMonth").value=monthNow();$("ledgerMonth").value=monthNow();$("attDate").value=today();$("attMonth").value=monthNow();$("txnDate").value=today();$("txnMonth").value=monthNow();$("reportMonth").value=monthNow();$("reportYear").value=String(new Date().getFullYear());
-authSetup();if(localStorage.getItem(AUTH)){$("authIntro").textContent="Enter your admin password to unlock the dashboard.";}else{$("authIntro").textContent="First-time setup: create a password. Your existing records will be retained.";}
+$("authYear").textContent=new Date().getFullYear();applyTheme();authSetup();
 </script>
 </body>
 </html>
