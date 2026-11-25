@@ -75,14 +75,13 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:15px}
   <div class="auth-foot">© <span id="authYear"></span> The Jayguru Hub · Private workspace</div>
  </aside>
  <div class="auth-panel">
-  <button class="auth-theme" type="button" id="authThemeBtn" onclick="toggleAuthTheme()">🌙 Dark mode</button>
   <div class="auth-card">
    <div style="font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#2563eb;margin-bottom:13px">ADMIN ACCESS</div>
    <h1 id="authHeading">Welcome back</h1>
    <p class="auth-subtitle" id="authIntro">Sign in to securely access your management dashboard.</p>
    <form id="authForm">
     <label for="adminId">Admin ID</label>
-    <div class="auth-id-wrap"><input id="adminId" type="text" autocomplete="username" required maxlength="40" placeholder="Create your Admin ID (e.g. Sumit Suklabaidya)"></div>
+    <input id="adminId" type="text" autocomplete="username" required maxlength="60" placeholder="Enter your Admin ID">
     <label id="passwordLabel" for="authPassword">Admin password</label>
     <div class="auth-password-wrap"><input id="authPassword" type="password" minlength="6" autocomplete="current-password" required placeholder="Enter your password"><button class="auth-eye" type="button" onclick="toggleAuthPassword('authPassword',this)">Show</button></div>
     <div id="confirmWrap"><label for="authConfirm">Confirm password</label><div class="auth-password-wrap"><input id="authConfirm" type="password" minlength="6" autocomplete="new-password" placeholder="Re-enter your password"><button class="auth-eye" type="button" onclick="toggleAuthPassword('authConfirm',this)">Show</button></div></div>
@@ -109,7 +108,6 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:15px}
  </nav>
  <div class="content-area">
  <section id="dashboard" class="section active">
-  <div class="dashboard-welcome"><div><div class="welcome-tag">✦ &nbsp; ADMIN WORKSPACE</div><h2 id="dashboardGreeting">Welcome to Jayguru Hub</h2><p>Your business overview, staff operations and daily records — all in one place.</p></div><div class="welcome-side" aria-hidden="true">✧</div></div>
   <div class="stats">
    <div class="stat"><span>Total staff</span><strong id="dashStaff">0</strong></div><div class="stat"><span>Today's salary</span><strong id="dashTodaySalary">₹0</strong></div><div class="stat"><span>Month paid</span><strong id="dashPaid">₹0</strong></div><div class="stat"><span>Month outstanding</span><strong id="dashDue">₹0</strong></div><div class="stat"><span>Today's shop income</span><strong id="dashIncome">₹0</strong></div><div class="stat"><span>Today's expenses</span><strong id="dashExpense">₹0</strong></div>
   </div>
@@ -220,16 +218,16 @@ function clearAllData(){if(!confirm("This permanently deletes ALL Jayguru Hub da
 function toggleTheme(){const next=document.documentElement.dataset.theme==="dark"?"light":"dark";document.documentElement.dataset.theme=next;localStorage.setItem(THEME,next);updateAuthThemeButton();}
 function applyTheme(){const t=localStorage.getItem(THEME)||"light";document.documentElement.dataset.theme=t;updateAuthThemeButton();}
 async function hashPassword(p){const bytes=new TextEncoder().encode(p),digest=await crypto.subtle.digest("SHA-256",bytes);return Array.from(new Uint8Array(digest)).map(b=>b.toString(16).padStart(2,"0")).join("");}
-function authSetup(){const exists=!!localStorage.getItem(AUTH);const idField=$("adminId");$("authIntro").textContent=exists?"Enter your Admin ID and password to continue to your management workspace.":"Create your Admin ID and password to secure your private dashboard.";$("authHeading").textContent=exists?"Welcome back":"Create admin access";$("passwordLabel").textContent=exists?"Admin password":"Create password";$("authPassword").placeholder=exists?"Enter your password":"Create a password (minimum 6 characters)";$("authSubmit").textContent=exists?"Sign in to dashboard":"Create admin account";$("confirmWrap").classList.toggle("hidden",exists);$("authConfirm").required=!exists;idField.value=exists?(localStorage.getItem(ADMIN_ID)||"admin"):"";idField.readOnly=exists&&!!localStorage.getItem(ADMIN_ID);idField.placeholder=exists?"Enter your Admin ID":"Create an Admin ID (e.g. admin)";}
+function authSetup(){const exists=!!localStorage.getItem(AUTH);const idField=$("adminId");$("authIntro").textContent=exists?"Enter your Admin ID and password to continue to your management workspace.":"Create your Admin ID and password to secure your private dashboard.";$("authHeading").textContent=exists?"Welcome back":"Create admin access";$("passwordLabel").textContent=exists?"Admin password":"Create password";$("authPassword").placeholder=exists?"Enter your password":"Create a password (minimum 6 characters)";$("authSubmit").textContent=exists?"Sign in to dashboard":"Create admin account";$("confirmWrap").classList.toggle("hidden",exists);$("authConfirm").required=!exists;idField.value=exists?(localStorage.getItem(ADMIN_ID)||"admin"):"";idField.readOnly=false;idField.placeholder=exists?"Enter or change your Admin ID":"Create an Admin ID (e.g. admin)";}
 function toggleAuthPassword(id,button){const field=$(id);const show=field.type==="password";field.type=show?"text":"password";button.textContent=show?"Hide":"Show";}
 function toggleAuthTheme(){const next=document.documentElement.dataset.theme==="dark"?"light":"dark";document.documentElement.dataset.theme=next;localStorage.setItem(THEME,next);updateAuthThemeButton();}
 function updateAuthThemeButton(){const dark=document.documentElement.dataset.theme==="dark";const label=dark?"☀ Light mode":"🌙 Dark mode";if($("authThemeBtn"))$("authThemeBtn").textContent=label;if($("themeBtn"))$("themeBtn").textContent=label;}
-$("authForm").addEventListener("submit",async e=>{e.preventDefault();const id=$("adminId").value.trim(),p=$("authPassword").value;if(!id){alert("Enter your Admin ID.");return}if(p.length<6){alert("Password must be at least 6 characters.");return}const saved=localStorage.getItem(AUTH);if(saved){const expectedId=localStorage.getItem(ADMIN_ID)||"admin";if(id.toLowerCase()!==expectedId.toLowerCase()){alert("Incorrect Admin ID.");return}if(await hashPassword(p)!==saved){alert("Incorrect password.");return}if(!localStorage.getItem(ADMIN_ID))localStorage.setItem(ADMIN_ID,expectedId);}else{if(p!==$("authConfirm").value){alert("Passwords do not match.");return}localStorage.setItem(ADMIN_ID,id);localStorage.setItem(AUTH,await hashPassword(p));}unlockApp();});
+$("authForm").addEventListener("submit",async e=>{e.preventDefault();const id=$("adminId").value.trim(),p=$("authPassword").value;if(!id){alert("Enter your Admin ID.");return}if(p.length<6){alert("Password must be at least 6 characters.");return}const saved=localStorage.getItem(AUTH);if(saved){if(await hashPassword(p)!==saved){alert("Incorrect password.");return}localStorage.setItem(ADMIN_ID,id);}else{if(p!==$("authConfirm").value){alert("Passwords do not match.");return}localStorage.setItem(ADMIN_ID,id);localStorage.setItem(AUTH,await hashPassword(p));}unlockApp();});
 function unlockApp(){$("authScreen").classList.add("hidden");$("app").classList.remove("hidden");$("authPassword").value="";$("authConfirm").value="";loadData();applyTheme();renderAll();}
 function lockApp(){$("app").classList.add("hidden");$("authScreen").classList.remove("hidden");authSetup();}
 async function changePassword(){const old=$("oldPassword").value,n=$("newPassword").value,n2=$("newPassword2").value;if(!old||!n){alert("Enter current and new password.");return}if(await hashPassword(old)!==localStorage.getItem(AUTH)){alert("Current password is incorrect.");return}if(n.length<6){alert("New password must be at least 6 characters.");return}if(n!==n2){alert("New passwords do not match.");return}localStorage.setItem(AUTH,await hashPassword(n));$("oldPassword").value=$("newPassword").value=$("newPassword2").value="";alert("Password changed.");}
 $("salaryMonth").value=monthNow();$("ledgerMonth").value=monthNow();$("attDate").value=today();$("attMonth").value=monthNow();$("txnDate").value=today();$("txnMonth").value=monthNow();$("reportMonth").value=monthNow();$("reportYear").value=String(new Date().getFullYear());
-$("authYear").textContent=new Date().getFullYear();applyTheme();authSetup();
+$("authYear").textContent=new Date().getFullYear();authSetup();
 </script>
 </body>
 </html>
