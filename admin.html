@@ -222,7 +222,25 @@ function authSetup(){const exists=!!localStorage.getItem(AUTH);const idField=$("
 function toggleAuthPassword(id,button){const field=$(id);const show=field.type==="password";field.type=show?"text":"password";button.textContent=show?"Hide":"Show";}
 function toggleAuthTheme(){const next=document.documentElement.dataset.theme==="dark"?"light":"dark";document.documentElement.dataset.theme=next;localStorage.setItem(THEME,next);updateAuthThemeButton();}
 function updateAuthThemeButton(){const dark=document.documentElement.dataset.theme==="dark";const label=dark?"☀ Light mode":"🌙 Dark mode";if($("authThemeBtn"))$("authThemeBtn").textContent=label;if($("themeBtn"))$("themeBtn").textContent=label;}
-$("authForm").addEventListener("submit",async e=>{e.preventDefault();const id=$("adminId").value.trim(),p=$("authPassword").value;if(!id){alert("Enter your Admin ID.");return}if(p.length<6){alert("Password must be at least 6 characters.");return}const saved=localStorage.getItem(AUTH);if(saved){if(await hashPassword(p)!==saved){alert("Incorrect password.");return}localStorage.setItem(ADMIN_ID,id);}else{if(p!==$("authConfirm").value){alert("Passwords do not match.");return}localStorage.setItem(ADMIN_ID,id);localStorage.setItem(AUTH,await hashPassword(p));}unlockApp();});
+$("authForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+ const id=$("adminId").value.trim(),p=$("authPassword").value;
+ if(!id){alert("Enter your Admin ID.");$("adminId").focus();return}
+ if(!p){alert("Enter your password.");$("authPassword").focus();return}
+ if(p.length<6){alert("Password must be at least 6 characters.");$("authPassword").focus();return}
+ const saved=localStorage.getItem(AUTH);
+ if(saved){
+  const savedId=localStorage.getItem(ADMIN_ID)||"admin";
+  if(id!==savedId){alert("Incorrect Admin ID.");$("adminId").focus();return}
+  if(await hashPassword(p)!==saved){alert("Incorrect password.");$("authPassword").focus();return}
+ }else{
+  if(!$("authConfirm").value){alert("Confirm your password.");$("authConfirm").focus();return}
+  if(p!==$("authConfirm").value){alert("Passwords do not match.");$("authConfirm").focus();return}
+  localStorage.setItem(ADMIN_ID,id);
+  localStorage.setItem(AUTH,await hashPassword(p));
+ }
+ unlockApp();
+});
 function unlockApp(){$("authScreen").classList.add("hidden");$("app").classList.remove("hidden");$("authPassword").value="";$("authConfirm").value="";loadData();applyTheme();renderAll();}
 function lockApp(){$("app").classList.add("hidden");$("authScreen").classList.remove("hidden");authSetup();}
 async function changePassword(){const old=$("oldPassword").value,n=$("newPassword").value,n2=$("newPassword2").value;if(!old||!n){alert("Enter current and new password.");return}if(await hashPassword(old)!==localStorage.getItem(AUTH)){alert("Current password is incorrect.");return}if(n.length<6){alert("New password must be at least 6 characters.");return}if(n!==n2){alert("New passwords do not match.");return}localStorage.setItem(AUTH,await hashPassword(n));$("oldPassword").value=$("newPassword").value=$("newPassword2").value="";alert("Password changed.");}
