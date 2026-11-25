@@ -1,303 +1,189 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The Jayguru Hub - Staff Salary</title>
+<title>The Jayguru Hub — Admin Dashboard</title>
 <style>
-*{box-sizing:border-box}
-body{margin:0;background:#f1f5f9;font-family:Arial;color:#172033}
-header{background:#172554;color:white;padding:20px;text-align:center}
-main{max-width:1100px;margin:auto;padding:16px}
-.card{background:white;padding:18px;border-radius:12px;margin-bottom:16px;box-shadow:0 2px 8px #0001}
-h2{margin-top:0;color:#1e3a8a}
-input,select,button{padding:12px;border:1px solid #cbd5e1;border-radius:7px;width:100%;margin:5px 0;font-size:15px}
-button{background:#1d4ed8;color:white;border:0;cursor:pointer;font-weight:bold}
-button.delete{background:#dc2626}
-button.secondary{background:#475569}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
-.stat{background:#eff6ff;padding:15px;border-radius:9px}
-.stat strong{display:block;font-size:21px;margin-top:8px}
-.table-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;min-width:750px}
-th,td{padding:10px;border-bottom:1px solid #e2e8f0;text-align:left}
-th{background:#eff6ff}
-.paid{color:green;font-weight:bold}
-.unpaid{color:#dc2626;font-weight:bold}
-small{color:#64748b}
+:root{--bg:#f3f6fb;--panel:#fff;--text:#172033;--muted:#64748b;--line:#e2e8f0;--primary:#1d4ed8;--primary2:#2563eb;--soft:#eff6ff;--green:#15803d;--red:#dc2626;--amber:#b45309;--shadow:0 5px 18px #0f172a0d}
+[data-theme="dark"]{--bg:#0b1220;--panel:#111c2e;--text:#e5edf8;--muted:#9aabc2;--line:#26364d;--primary:#60a5fa;--primary2:#3b82f6;--soft:#172b49;--green:#4ade80;--red:#f87171;--amber:#fbbf24;--shadow:0 5px 18px #0003}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 Inter,Arial,sans-serif;transition:background .2s,color .2s}
+header{background:linear-gradient(120deg,#172554,#1d4ed8);color:#fff;padding:20px max(18px,calc((100% - 1250px)/2));display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap}
+.brand h1{margin:0;font-size:25px}.brand p{margin:3px 0 0;color:#dbeafe}
+.header-actions{display:flex;gap:8px;flex-wrap:wrap}.header-actions button{width:auto;margin:0;background:#ffffff1c;border:1px solid #ffffff50}
+main{max-width:1450px;margin:auto;padding:20px;display:grid;grid-template-columns:230px minmax(0,1fr);gap:20px;align-items:start}
+.nav{display:flex;flex-direction:column;gap:7px;padding:10px;background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);position:sticky;top:16px;max-height:calc(100vh - 32px);overflow-y:auto}
+.nav button{display:flex;align-items:center;gap:10px;text-align:left;white-space:normal;width:100%;margin:0;background:transparent;color:var(--muted);border:1px solid transparent;padding:12px 13px;border-radius:9px}
+.nav button:hover{background:var(--soft);color:var(--text)}.nav button.active{background:var(--primary);color:white;border-color:var(--primary)}
+.content-area{min-width:0}.nav-label{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);padding:5px 12px 2px;font-weight:700}
+.card{background:var(--panel);border:1px solid var(--line);padding:18px;border-radius:15px;margin-bottom:16px;box-shadow:var(--shadow)}
+h2{font-size:18px;margin:0 0 15px}h3{font-size:15px;margin:0 0 10px}.muted,small{color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:11px}.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:12px;margin-bottom:16px}
+.stat{background:var(--soft);border:1px solid var(--line);padding:16px;border-radius:12px}.stat span{color:var(--muted);font-size:13px}.stat strong{display:block;font-size:23px;margin-top:7px;overflow-wrap:anywhere}
+input,select,textarea,button{font:inherit}input,select,textarea{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:9px;background:var(--panel);color:var(--text);margin:4px 0;min-width:0}input:focus,select:focus,textarea:focus{outline:2px solid #3b82f655;border-color:var(--primary)}
+button{padding:10px 14px;border:0;border-radius:9px;background:var(--primary);color:#fff;cursor:pointer;font-weight:650;margin:4px 3px 4px 0}button:hover{filter:brightness(1.06)}button:disabled{opacity:.5;cursor:not-allowed}
+button.secondary{background:#64748b}button.danger{background:#dc2626}button.success{background:#15803d}button.light{background:var(--soft);color:var(--text);border:1px solid var(--line)}
+.actions{display:flex;gap:5px;flex-wrap:wrap}.actions button{font-size:12px;padding:7px 9px}
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:10px}table{width:100%;border-collapse:collapse;min-width:720px}th,td{padding:10px 11px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}th{background:var(--soft);font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}tr:last-child td{border-bottom:0}
+.paid,.present{color:var(--green);font-weight:700}.unpaid,.absent{color:var(--red);font-weight:700}.badge{display:inline-block;padding:3px 8px;border-radius:20px;background:var(--soft);font-size:12px}
+.section{display:none}.section.active{display:block}.toolbar{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-bottom:12px}.toolbar>*{flex:1;min-width:140px}.toolbar button{flex:0 0 auto}
+.notice{padding:11px 13px;border-radius:9px;background:var(--soft);color:var(--muted);margin:10px 0;font-size:13px}
+.empty{text-align:center;color:var(--muted);padding:22px}.hidden{display:none!important}
+.modal{position:fixed;inset:0;background:#02061799;display:none;align-items:center;justify-content:center;padding:15px;z-index:30}.modal.show{display:flex}.modal-box{background:var(--panel);color:var(--text);width:min(650px,100%);max-height:90vh;overflow:auto;border-radius:15px;padding:20px;box-shadow:0 20px 70px #0005}
+.modal-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}.modal-head h2{margin:0}.close{background:transparent;color:var(--text);font-size:22px;padding:0 8px}
+#authScreen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:var(--bg)}.auth-card{width:min(430px,100%);background:var(--panel);padding:28px;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}.auth-card h1{margin:0 0 5px}.auth-card p{color:var(--muted)}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:15px}
+@media(max-width:800px){main{grid-template-columns:185px minmax(0,1fr);gap:12px;padding:12px}.nav{top:10px}.nav button{padding:10px;font-size:13px}}
+@media(max-width:600px){header{padding:16px}.brand h1{font-size:21px}main{display:block;padding:12px}.nav{position:relative;top:auto;max-height:none;flex-direction:row;overflow-x:auto;overflow-y:hidden;margin:0 0 14px;padding:7px;gap:6px}.nav-label{display:none}.nav button{width:auto;flex:0 0 auto;white-space:nowrap;padding:9px 12px}.card{padding:14px}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.stat strong{font-size:19px}}
+@media print{body{background:#fff;color:#000}header,.nav,.no-print,button,footer{display:none!important}main{max-width:none;padding:0}.card{box-shadow:none;border:0}.section{display:none!important}.table-wrap{overflow:visible}table{min-width:0}th,td{white-space:normal}body.report-print #reports{display:block!important}body.receipt-print #receiptModal{display:flex!important;position:static;background:#fff;padding:0}body.receipt-print #receiptPrint{display:block!important;width:100%;max-height:none;overflow:visible;box-shadow:none;border:0}}
 </style>
 </head>
 <body>
-
+<div id="authScreen">
+ <div class="auth-card">
+  <h1>🔐 The Jayguru Hub</h1><p id="authIntro">Set an admin password to protect this dashboard on this device.</p>
+  <form id="authForm">
+   <label id="passwordLabel" for="authPassword">Create password</label>
+   <input id="authPassword" type="password" minlength="6" autocomplete="current-password" required placeholder="At least 6 characters">
+   <div id="confirmWrap"><label for="authConfirm">Confirm password</label><input id="authConfirm" type="password" minlength="6" autocomplete="new-password" placeholder="Re-enter password"></div>
+   <button type="submit" style="width:100%;margin-top:12px" id="authSubmit">Set Password</button>
+  </form>
+  <p class="notice">This is local device-level protection, not server-grade security. Anyone with browser developer tools or access to this device may be able to inspect locally stored data.</p>
+ </div>
+</div>
+<div id="app" class="hidden">
 <header>
-<h1>The Jayguru Hub</h1>
-<p>Staff Daily Salary Management</p>
+ <div class="brand"><h1>The Jayguru Hub</h1><p>Staff & Business Management Dashboard</p></div>
+ <div class="header-actions no-print"><button onclick="toggleTheme()" id="themeBtn">🌙 Dark mode</button><button onclick="lockApp()">🔒 Lock</button></div>
 </header>
-
 <main>
+ <nav class="nav no-print" id="nav" aria-label="Main navigation">
+  <div class="nav-label">Workspace</div>
+  <button class="active" data-tab="dashboard">▦ &nbsp; Dashboard</button><button data-tab="staff">♙ &nbsp; Staff</button><button data-tab="salary">₹ &nbsp; Salary</button><button data-tab="ledger">▤ &nbsp; Staff Ledger</button>
+  <div class="nav-label">Operations</div>
+  <button data-tab="attendance">✓ &nbsp; Attendance</button><button data-tab="business">↗ &nbsp; Income & Expense</button>
+  <div class="nav-label">Management</div>
+  <button data-tab="reports">▥ &nbsp; Reports</button><button data-tab="backup">⚙ &nbsp; Backup & Settings</button>
+ </nav>
+ <div class="content-area">
+ <section id="dashboard" class="section active">
+  <div class="stats">
+   <div class="stat"><span>Total staff</span><strong id="dashStaff">0</strong></div><div class="stat"><span>Today's salary</span><strong id="dashTodaySalary">₹0</strong></div><div class="stat"><span>Month paid</span><strong id="dashPaid">₹0</strong></div><div class="stat"><span>Month outstanding</span><strong id="dashDue">₹0</strong></div><div class="stat"><span>Today's shop income</span><strong id="dashIncome">₹0</strong></div><div class="stat"><span>Today's expenses</span><strong id="dashExpense">₹0</strong></div>
+  </div>
+  <div class="card"><h2>Quick actions</h2><div class="actions"><button onclick="showTab('salary')">＋ Add salary</button><button onclick="showTab('attendance')">＋ Mark attendance</button><button onclick="showTab('business')">＋ Add income / expense</button><button class="secondary" onclick="showTab('reports')">View reports</button></div></div>
+  <div class="card"><h2>Recent salary entries</h2><div class="table-wrap"><table><thead><tr><th>Date</th><th>Staff</th><th>Net salary</th><th>Status</th></tr></thead><tbody id="recentRows"></tbody></table></div></div>
+ </section>
 
-<section class="card">
-<h2>1. Add Staff</h2>
-<div class="grid">
-<input id="staffName" placeholder="Staff Name">
-<input id="staffPhone" placeholder="Mobile Number">
-</div>
-<button onclick="addStaff()">+ Add Staff</button>
-</section>
+ <section id="staff" class="section">
+  <div class="card"><h2>Add / Edit Staff</h2><input type="hidden" id="staffEditId"><div class="grid"><input id="staffName" placeholder="Staff name" maxlength="70"><input id="staffPhone" placeholder="Mobile number" inputmode="tel" maxlength="20"><input id="staffJoin" type="date"><select id="staffStatus"><option value="Active">Active</option><option value="Inactive">Inactive</option></select></div><div class="actions"><button onclick="saveStaff()" id="staffSaveBtn">＋ Add staff</button><button class="secondary hidden" id="staffCancel" onclick="resetStaffForm()">Cancel edit</button></div></div>
+  <div class="card"><h2>Staff directory</h2><div class="toolbar"><input id="staffSearch" placeholder="Search name or phone…" oninput="renderStaff()"><select id="staffFilter" onchange="renderStaff()"><option value="">All staff</option><option>Active</option><option>Inactive</option></select></div><div class="table-wrap"><table><thead><tr><th>Name</th><th>Mobile</th><th>Joined</th><th>Status</th><th>Actions</th></tr></thead><tbody id="staffRows"></tbody></table></div></div>
+ </section>
 
-<section class="card">
-<h2>2. Daily Salary Entry</h2>
-<div class="grid">
-<select id="salaryStaff">
-<option value="">Select Staff</option>
-</select>
-<input type="date" id="salaryDate">
-<input type="number" id="income" placeholder="Daily Shop Income (Optional)" min="0">
-<input type="number" id="salary" placeholder="Enter Salary Amount ₹" min="0">
-<input type="number" id="advance" placeholder="Advance ₹" value="0" min="0">
-<input type="number" id="deduction" placeholder="Deduction ₹" value="0" min="0">
-<select id="status">
-<option value="Unpaid">Unpaid</option>
-<option value="Paid">Paid</option>
-</select>
-<input id="note" placeholder="Remarks (Optional)">
-</div>
-<button onclick="addSalary()">Save Salary</button>
-</section>
+ <section id="salary" class="section">
+  <div class="card"><h2 id="salaryFormTitle">Daily Salary Entry</h2><input type="hidden" id="salaryEditId"><div class="grid">
+   <select id="salaryStaff"><option value="">Select staff</option></select><input type="date" id="salaryDate"><input type="number" id="income" placeholder="Legacy shop income (optional)" min="0" step=".01"><input type="number" id="salaryAmount" placeholder="Gross salary ₹" min="0" step=".01"><input type="number" id="advance" placeholder="Advance ₹" value="0" min="0" step=".01"><input type="number" id="deduction" placeholder="Deduction ₹" value="0" min="0" step=".01"><select id="salaryStatus"><option>Unpaid</option><option>Paid</option></select><select id="paymentMethod"><option value="">Payment method</option><option>Cash</option><option>UPI</option><option>Bank</option><option>Other</option></select><input type="date" id="paymentDate" title="Payment date"><input id="salaryNote" placeholder="Remarks (optional)" maxlength="180">
+  </div><div class="actions"><button onclick="saveSalary()" id="salarySaveBtn">Save salary</button><button class="secondary hidden" id="salaryCancel" onclick="resetSalaryForm()">Cancel edit</button></div><div class="notice">Net salary = Gross salary − Advance − Deduction. Legacy income values remain attached to their original salary records for compatibility; use the separate Income & Expense tab for new shop transactions.</div></div>
+  <div class="card"><h2>Salary history</h2><div class="toolbar"><input type="month" id="salaryMonth" onchange="renderSalary()"><input id="salarySearch" placeholder="Search staff / remarks…" oninput="renderSalary()"><select id="salaryStatusFilter" onchange="renderSalary()"><option value="">All statuses</option><option>Paid</option><option>Unpaid</option></select><select id="salaryStaffFilter" onchange="renderSalary()"><option value="">All staff</option></select></div><div class="table-wrap"><table><thead><tr><th>Date</th><th>Staff</th><th>Income*</th><th>Gross</th><th>Advance</th><th>Deduction</th><th>Net</th><th>Status</th><th>Actions</th></tr></thead><tbody id="salaryRows"></tbody></table></div><small>*Income is retained from your previous version.</small></div>
+ </section>
 
-<section class="card">
-<h2>3. Monthly Salary Report</h2>
-<input type="month" id="month" onchange="render()">
-<div class="stats">
-<div class="stat">Total Salary<strong id="total">₹0</strong></div>
-<div class="stat">Paid<strong id="paid">₹0</strong></div>
-<div class="stat">Unpaid<strong id="unpaid">₹0</strong></div>
-</div>
-</section>
+ <section id="ledger" class="section">
+  <div class="card"><h2>Individual staff ledger</h2><div class="toolbar"><select id="ledgerStaff" onchange="renderLedger()"><option value="">Select staff</option></select><input type="month" id="ledgerMonth" onchange="renderLedger()"></div><div id="ledgerSummary" class="stats"></div><div class="table-wrap"><table><thead><tr><th>Date</th><th>Gross</th><th>Advance</th><th>Deduction</th><th>Net</th><th>Status</th><th>Receipt</th></tr></thead><tbody id="ledgerRows"></tbody></table></div></div>
+ </section>
 
-<section class="card">
-<h2>4. Date-wise Salary History</h2>
-<div class="table-wrap">
-<table>
-<thead>
-<tr>
-<th>Date</th><th>Staff</th><th>Income</th>
-<th>Salary</th><th>Advance</th><th>Deduction</th>
-<th>Net</th><th>Status</th><th>Action</th>
-</tr>
-</thead>
-<tbody id="salaryList"></tbody>
-</table>
-</div>
-<button class="secondary" onclick="exportCSV()">Download Excel CSV</button>
-</section>
+ <section id="attendance" class="section">
+  <div class="card"><h2>Staff attendance</h2><div class="grid"><input type="date" id="attDate"><select id="attStaff"><option value="">Select staff</option></select><select id="attStatus"><option>Present</option><option>Absent</option><option>Half Day</option><option>Leave</option></select><input id="attNote" placeholder="Remarks (optional)" maxlength="150"></div><button onclick="saveAttendance()">Save attendance</button></div>
+  <div class="card"><h2>Attendance records</h2><div class="toolbar"><input type="month" id="attMonth" onchange="renderAttendance()"><select id="attStaffFilter" onchange="renderAttendance()"><option value="">All staff</option></select><select id="attStatusFilter" onchange="renderAttendance()"><option value="">All status</option><option>Present</option><option>Absent</option><option>Half Day</option><option>Leave</option></select></div><div class="table-wrap"><table><thead><tr><th>Date</th><th>Staff</th><th>Status</th><th>Remarks</th><th>Action</th></tr></thead><tbody id="attendanceRows"></tbody></table></div></div>
+ </section>
 
-<section class="card">
-<h2>5. Staff List</h2>
-<div class="table-wrap">
-<table>
-<thead><tr><th>Name</th><th>Mobile</th><th>Action</th></tr></thead>
-<tbody id="staffList"></tbody>
-</table>
-</div>
-</section>
+ <section id="business" class="section">
+  <div class="card"><h2>Daily shop income & expense</h2><input type="hidden" id="txnEditId"><div class="grid"><input type="date" id="txnDate"><select id="txnType"><option>Income</option><option>Expense</option></select><input type="number" id="txnAmount" min=".01" step=".01" placeholder="Amount ₹"><input id="txnCategory" maxlength="60" placeholder="Category (e.g. Sales, Rent)"><input id="txnNote" maxlength="150" placeholder="Description / note"></div><div class="actions"><button onclick="saveTxn()" id="txnSaveBtn">Save transaction</button><button class="secondary hidden" id="txnCancel" onclick="resetTxnForm()">Cancel edit</button></div></div>
+  <div class="card"><h2>Transactions</h2><div class="toolbar"><input type="month" id="txnMonth" onchange="renderTransactions()"><select id="txnTypeFilter" onchange="renderTransactions()"><option value="">All types</option><option>Income</option><option>Expense</option></select></div><div class="stats"><div class="stat"><span>Income</span><strong id="txnIncomeTotal">₹0</strong></div><div class="stat"><span>Expenses</span><strong id="txnExpenseTotal">₹0</strong></div><div class="stat"><span>Net</span><strong id="txnNetTotal">₹0</strong></div></div><div class="table-wrap"><table><thead><tr><th>Date</th><th>Type</th><th>Category</th><th>Description</th><th>Amount</th><th>Actions</th></tr></thead><tbody id="txnRows"></tbody></table></div></div>
+ </section>
 
+ <section id="reports" class="section">
+  <div class="card"><h2>Monthly & yearly reports</h2><div class="grid"><select id="reportMode" onchange="renderReports()"><option value="month">Monthly report</option><option value="year">Yearly report</option></select><input type="month" id="reportMonth" onchange="renderReports()"><input type="number" id="reportYear" min="2000" max="2100" step="1" onchange="renderReports()"></div><div class="stats"><div class="stat"><span>Gross salary</span><strong id="rGross">₹0</strong></div><div class="stat"><span>Paid salary</span><strong id="rPaid">₹0</strong></div><div class="stat"><span>Unpaid salary</span><strong id="rUnpaid">₹0</strong></div><div class="stat"><span>Shop income</span><strong id="rIncome">₹0</strong></div><div class="stat"><span>Shop expense</span><strong id="rExpense">₹0</strong></div><div class="stat"><span>Business net</span><strong id="rNet">₹0</strong></div></div><div class="actions"><button onclick="printReport()">Print report</button><button class="secondary" onclick="exportReportCSV()">Export report CSV</button></div></div>
+ </section>
+
+ <section id="backup" class="section">
+  <div class="card"><h2>Backup & restore</h2><p class="muted">Download a JSON backup containing staff, salary history, attendance, shop transactions and preferences. Store it somewhere safe.</p><button onclick="backupData()">⬇ Download full backup</button><label style="display:block;margin-top:15px">Restore from JSON backup<input type="file" id="restoreFile" accept=".json,application/json" onchange="restoreData(event)"></label><div class="notice">Restoring replaces the current records. Make a backup first. Only restore files you trust.</div></div>
+  <div class="card"><h2>Security & app settings</h2><p class="muted">Change the local dashboard password or lock the app.</p><div class="grid"><input type="password" id="oldPassword" placeholder="Current password"><input type="password" id="newPassword" placeholder="New password (min 6 characters)"><input type="password" id="newPassword2" placeholder="Confirm new password"></div><button onclick="changePassword()">Change password</button><button class="secondary" onclick="lockApp()">Lock dashboard now</button></div>
+  <div class="card"><h2>Data information</h2><p class="muted">Existing storage key: <code>jayguru_staff_salary_v1</code>. The app keeps the original staff and payments structure and stores new modules in separate local storage keys.</p><button class="danger" onclick="clearAllData()">Delete all app data</button></div>
+ </section>
+ </div>
 </main>
+<footer>The Jayguru Hub • Local-first staff & business management</footer>
+</div>
+
+<div class="modal" id="receiptModal"><div class="modal-box" id="receiptPrint"><div class="modal-head no-print"><h2>Salary receipt</h2><button class="close" onclick="closeReceipt()">×</button></div><div id="receiptContent"></div><div class="actions no-print"><button onclick="window.print()">Print receipt</button><button class="secondary" onclick="closeReceipt()">Close</button></div></div></div>
 
 <script>
-const KEY="jayguru_staff_salary_v1";
-
-let db;
-try{
- db=JSON.parse(localStorage.getItem(KEY)) || {staff:[],payments:[]};
- if(!Array.isArray(db.staff)) db.staff=[];
- if(!Array.isArray(db.payments)) db.payments=[];
-}catch(e){
- db={staff:[],payments:[]};
-}
-
-const $=id=>document.getElementById(id);
-const money=n=>"₹"+Number(n||0).toLocaleString("en-IN");
-
-function save(){
- localStorage.setItem(KEY,JSON.stringify(db));
- render();
-}
-
-function addStaff(){
- const name=$("staffName").value.trim();
- const phone=$("staffPhone").value.trim();
-
- if(!name || !phone){
-  alert("Enter staff name and mobile number");
-  return;
- }
-
- db.staff.push({
-  id:Date.now()+Math.random(),
-  name,phone
- });
-
- $("staffName").value="";
- $("staffPhone").value="";
- save();
-}
-
-function addSalary(){
- const staff=db.staff.find(s=>
-  String(s.id)===$("salaryStaff").
-  value);
- const date=$("salaryDate").value;
- const income=Number($("income").value||0);
- const salaryInput=$("salary").value.trim();
- const salary=Number(salaryInput);
- const advance=Number($("advance").value||0);
- const deduction=Number($("deduction").value||0);
-
- if(!staff || !date || salaryInput==="" || !Number.isFinite(salary) ||
-    salary<0 || !Number.isFinite(income) || income<0 ||
-    !Number.isFinite(advance) || advance<0 ||
-    !Number.isFinite(deduction) || deduction<0 ||
-    advance+deduction>salary){
-  alert("Please check all salary details. Advance and deduction cannot exceed salary.");
-  return;
- }
-
- if(db.payments.some(p=>p.staffId===staff.id && p.date===date)){
-  alert("Salary entry already exists for this staff and date. Delete the old entry before adding another.");
-  return;
- }
-
- db.payments.push({
-  id:Date.now()+Math.random(),
-  staffId:staff.id,
-  staffName:staff.name,
-  date,income,salary,advance,deduction,
-  net:salary-advance-deduction,
-  status:$("status").value,
-  note:$("note").value.trim()
- });
-
- $("income").value="";
- $("salary").value="";
- $("advance").value=0;
- $("deduction").value=0;
- $("note").value="";
-
- save();
- alert("Salary saved successfully");
-}
-
-function deleteSalary(id){
- if(!confirm("Delete this salary record?"))return;
- db.payments=db.payments.filter(p=>p.id!==id);
- save();
-}
-
-function deleteStaff(id){
- if(db.payments.some(p=>p.staffId===id)){
-  alert("Staff has salary history. Keep this record.");
-  return;
- }
- if(confirm("Delete this staff member?")){
-  db.staff=db.staff.filter(s=>s.id!==id);
-  save();
- }
-}
-
-function esc(value){
- return String(value??"").replace(/[&<>"']/g,c=>({
- "&":"&amp;","<":"&lt;",">":"&gt;",
- '"':"&quot;","'":"&#39;"
- }[c]));
-}
-
-function render(){
- const selected=$("salaryStaff").value;
-
- $("salaryStaff").innerHTML=
- '<option value="">Select Staff</option>'+
- db.staff.map(s=>
- `<option value="${esc(s.id)}">${esc(s.name)}</option>`
- ).join("");
-
- if(db.staff.some(s=>String(s.id)===selected)){
-  $("salaryStaff").value=selected;
- }
-
- $("staffList").innerHTML=db.staff.map(s=>`
- <tr>
- <td>${esc(s.name)}</td>
- <td>${esc(s.phone)}</td>
- <td><button class="delete" onclick="deleteStaff(${JSON.stringify(s.id)})">Delete</button></td>
- </tr>
- `).join("");
-
- const month=$("month").value;
- const records=db.payments
- .filter(p=>p.date.startsWith(month))
- .sort((a,b)=>b.date.localeCompare(a.date));
-
- $("salaryList").innerHTML=records.map(p=>`
- <tr>
- <td>${esc(p.date)}</td>
- <td>${esc(p.staffName)}</td>
- <td>${money(p.income)}</td>
- <td>${money(p.salary)}</td>
- <td>${money(p.advance)}</td>
- <td>${money(p.deduction)}</td>
- <td>${money(p.net)}</td>
- <td class="${p.status==="Paid"?"paid":"unpaid"}">${esc(p.status)}</td>
- <td><button class="delete" onclick="deleteSalary(${JSON.stringify(p.id)})">Delete</button></td>
- </tr>
- `).join("");
-
- const total=records.reduce((a,p)=>a+p.net,0);
- const paid=records.filter(p=>p.status==="Paid").reduce((a,p)=>a+p.net,0);
- const unpaid=records.filter(p=>p.status==="Unpaid").reduce((a,p)=>a+p.net,0);
-
- $("total").textContent=money(total);
- $("paid").textContent=money(paid);
- $("unpaid").textContent=money(unpaid);
-}
-
-function exportCSV(){
- const month=$("month").value;
- const records=db.payments.filter(p=>p.date.startsWith(month));
-
- const rows=[
- ["Date","Staff","Income","Salary","Advance","Deduction","Net","Status","Remarks"],
- ...records.map(p=>[
- p.date,p.staffName,p.income,p.salary,
- p.advance,p.deduction,p.net,p.status,p.note
- ])
- ];
-
- const csv=rows.map(row=>row.map(v=>
- '"'+String(v??"").replace(/"/g,'""')+'"'
- ).join(",")).join("\n");
-
- const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8"});
- const url=URL.createObjectURL(blob);
- const a=document.createElement("a");
- a.href=url;
- a.download="Jayguru-Staff-Salary-"+month+".csv";
- a.click();
- URL.revokeObjectURL(url);
-}
-
-const today=new Date();
-const localDate=[
- today.getFullYear(),
- String(today.getMonth()+1).padStart(2,"0"),
- String(today.getDate()).padStart(2,"0")
-].join("-");
-$("salaryDate").value=localDate;
-$("month").value=localDate.slice(0,7);
-render();
+"use strict";
+const KEY="jayguru_staff_salary_v1", EXTRA="jayguru_hub_extra_v2", AUTH="jayguru_hub_auth_v1", THEME="jayguru_hub_theme";
+const $=id=>document.getElementById(id), money=n=>"₹"+Number(n||0).toLocaleString("en-IN",{minimumFractionDigits:0,maximumFractionDigits:2});
+const today=()=>{const d=new Date();return [d.getFullYear(),String(d.getMonth()+1).padStart(2,"0"),String(d.getDate()).padStart(2,"0")].join("-")};
+const monthNow=()=>today().slice(0,7);
+let db={staff:[],payments:[]}, extra={attendance:[],transactions:[]};
+function loadData(){try{const raw=JSON.parse(localStorage.getItem(KEY)||"{}");db={staff:Array.isArray(raw.staff)?raw.staff:[],payments:Array.isArray(raw.payments)?raw.payments:[]};}catch(e){db={staff:[],payments:[]};alert("The original salary data could not be read. A new empty data set was loaded; do not save over your browser data until you have checked your backup.");}
+try{const x=JSON.parse(localStorage.getItem(EXTRA)||"{}");extra={attendance:Array.isArray(x.attendance)?x.attendance:[],transactions:Array.isArray(x.transactions)?x.transactions:[]};}catch(e){extra={attendance:[],transactions:[]};}}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(db));localStorage.setItem(EXTRA,JSON.stringify(extra));}catch(e){alert("Could not save data. Browser storage may be full or disabled.");}renderAll();}
+function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function num(id){return Number($(id).value||0)}
+function validAmount(v){return Number.isFinite(v)&&v>=0}
+function staffById(id){return db.staff.find(s=>String(s.id)===String(id))}
+function net(p){return Number(p.net??(Number(p.salary||0)-Number(p.advance||0)-Number(p.deduction||0)))}
+function setSelect(id,items,first){const el=$(id),old=el.value;el.innerHTML=`<option value="">${first}</option>`+items.map(s=>`<option value="${esc(s.id)}">${esc(s.name)}</option>`).join("");if(items.some(s=>String(s.id)===old))el.value=old;}
+function activeStaff(){return db.staff.filter(s=>s.status!=="Inactive")}
+function showTab(tab){document.querySelectorAll(".section").forEach(s=>s.classList.toggle("active",s.id===tab));document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.tab===tab));if(tab==="reports")renderReports();if(tab==="ledger")renderLedger();}
+$("nav").addEventListener("click",e=>{const b=e.target.closest("button[data-tab]");if(b)showTab(b.dataset.tab)});
+function renderAll(){setSelect("salaryStaff",activeStaff(),"Select staff");setSelect("salaryStaffFilter",db.staff,"All staff");setSelect("ledgerStaff",db.staff,"Select staff");setSelect("attStaff",activeStaff(),"Select staff");setSelect("attStaffFilter",db.staff,"All staff");renderDashboard();renderStaff();renderSalary();renderLedger();renderAttendance();renderTransactions();renderReports();}
+function sum(a,fn){return a.reduce((t,x)=>t+fn(x),0)}
+function renderDashboard(){const m=monthNow(),t=today(),ps=db.payments.filter(p=>(p.date||"").startsWith(m)),todayP=db.payments.filter(p=>p.date===t),tx=extra.transactions.filter(x=>x.date===t);$("dashStaff").textContent=activeStaff().length;$("dashTodaySalary").textContent=money(sum(todayP,net));$("dashPaid").textContent=money(sum(ps.filter(p=>p.status==="Paid"),net));$("dashDue").textContent=money(sum(ps.filter(p=>p.status!=="Paid"),net));$("dashIncome").textContent=money(sum(tx.filter(x=>x.type==="Income"),x=>Number(x.amount)));$("dashExpense").textContent=money(sum(tx.filter(x=>x.type==="Expense"),x=>Number(x.amount)));const recent=[...db.payments].sort((a,b)=>(b.date||"").localeCompare(a.date||"")).slice(0,8);$("recentRows").innerHTML=recent.length?recent.map(p=>`<tr><td>${esc(p.date)}</td><td>${esc(p.staffName||staffById(p.staffId)?.name||"Unknown")}</td><td>${money(net(p))}</td><td class="${p.status==="Paid"?"paid":"unpaid"}">${esc(p.status||"Unpaid")}</td></tr>`).join(""):`<tr><td colspan="4" class="empty">No salary entries yet</td></tr>`;}
+function saveStaff(){const id=$("staffEditId").value,name=$("staffName").value.trim(),phone=$("staffPhone").value.trim();if(!name){alert("Enter staff name.");return}if(!phone){alert("Enter mobile number.");return}if(!/^[+()0-9\s-]{7,20}$/.test(phone)){alert("Enter a valid mobile number.");return}const duplicate=db.staff.find(s=>s.phone===phone&&String(s.id)!==id);if(duplicate&&!confirm("Another staff member has this mobile number. Save anyway?"))return;
+if(id){const s=staffById(id);if(!s)return;s.name=name;s.phone=phone;s.joinDate=$("staffJoin").value;s.status=$("staffStatus").value;db.payments.forEach(p=>{if(String(p.staffId)===id)p.staffName=name;});}else db.staff.push({id:Date.now()+Math.random(),name,phone,joinDate:$("staffJoin").value,status:$("staffStatus").value});
+resetStaffForm();persist();}
+function editStaff(id){const s=staffById(id);if(!s)return;$("staffEditId").value=s.id;$("staffName").value=s.name;$("staffPhone").value=s.phone;$("staffJoin").value=s.joinDate||"";$("staffStatus").value=s.status||"Active";$("staffSaveBtn").textContent="Save changes";$("staffCancel").classList.remove("hidden");showTab("staff");window.scrollTo({top:0,behavior:"smooth"});}
+function resetStaffForm(){$("staffEditId").value="";$("staffName").value="";$("staffPhone").value="";$("staffJoin").value="";$("staffStatus").value="Active";$("staffSaveBtn").textContent="＋ Add staff";$("staffCancel").classList.add("hidden");}
+function removeStaff(id){const s=staffById(id);if(!s)return;if(db.payments.some(p=>String(p.staffId)===String(id))){if(!confirm("This staff member has salary history. Mark inactive instead?"))return;s.status="Inactive";persist();return;}if(confirm("Delete this staff member?")){db.staff=db.staff.filter(x=>String(x.id)!==String(id));persist();}}
+function renderStaff(){const q=$("staffSearch").value.toLowerCase(),f=$("staffFilter").value;const list=db.staff.filter(s=>(!f||(s.status||"Active")===f)&&(`${s.name} ${s.phone}`.toLowerCase().includes(q)));$("staffRows").innerHTML=list.length?list.map(s=>`<tr><td>${esc(s.name)}</td><td>${esc(s.phone)}</td><td>${esc(s.joinDate||"—")}</td><td><span class="badge">${esc(s.status||"Active")}</span></td><td><div class="actions"><button class="light" onclick="editStaff(${JSON.stringify(s.id)})">Edit</button><button class="danger" onclick="removeStaff(${JSON.stringify(s.id)})">${db.payments.some(p=>String(p.staffId)===String(s.id))?"Deactivate":"Delete"}</button></div></td></tr>`).join(""):`<tr><td colspan="5" class="empty">No staff found</td></tr>`;}
+function saveSalary(){const id=$("salaryEditId").value,staff=staffById($("salaryStaff").value),date=$("salaryDate").value,salary=num("salaryAmount"),advance=num("advance"),deduction=num("deduction"),income=num("income");if(!staff||!date){alert("Select staff and salary date.");return}if(!validAmount(salary)||!validAmount(advance)||!validAmount(deduction)||!validAmount(income)){alert("Enter valid non-negative amounts.");return}if(advance+deduction>salary){alert("Advance and deduction cannot exceed gross salary.");return}if(db.payments.some(p=>String(p.staffId)===String(staff.id)&&p.date===date&&String(p.id)!==id)){alert("A salary entry already exists for this staff and date.");return}
+const record={staffId:staff.id,staffName:staff.name,date,income,salary,advance,deduction,net:salary-advance-deduction,status:$("salaryStatus").value,note:$("salaryNote").value.trim(),paymentMethod:$("paymentMethod").value,paymentDate:$("paymentDate").value||($("salaryStatus").value==="Paid"?date:"")};
+if(id){const i=db.payments.findIndex(p=>String(p.id)===id);if(i<0)return;db.payments[i]={...db.payments[i],...record};}else db.payments.push({id:Date.now()+Math.random(),...record});
+resetSalaryForm();persist();}
+function editSalary(id){const p=db.payments.find(x=>String(x.id)===String(id));if(!p)return;$("salaryEditId").value=p.id;$("salaryStaff").value=p.staffId;$("salaryDate").value=p.date;$("income").value=p.income??0;$("salaryAmount").value=p.salary??0;$("advance").value=p.advance??0;$("deduction").value=p.deduction??0;$("salaryStatus").value=p.status||"Unpaid";$("paymentMethod").value=p.paymentMethod||"";$("paymentDate").value=p.paymentDate||"";$("salaryNote").value=p.note||"";$("salaryFormTitle").textContent="Edit salary entry";$("salarySaveBtn").textContent="Save changes";$("salaryCancel").classList.remove("hidden");showTab("salary");window.scrollTo({top:0,behavior:"smooth"});}
+function resetSalaryForm(){$("salaryEditId").value="";$("salaryDate").value=today();$("income").value="";$("salaryAmount").value="";$("advance").value=0;$("deduction").value=0;$("salaryStatus").value="Unpaid";$("paymentMethod").value="";$("paymentDate").value="";$("salaryNote").value="";$("salaryFormTitle").textContent="Daily Salary Entry";$("salarySaveBtn").textContent="Save salary";$("salaryCancel").classList.add("hidden");}
+function deleteSalary(id){if(confirm("Delete this salary record permanently?")){db.payments=db.payments.filter(p=>String(p.id)!==String(id));persist();}}
+function markPaid(id){const p=db.payments.find(x=>String(x.id)===String(id));if(!p)return;p.status=p.status==="Paid"?"Unpaid":"Paid";if(p.status==="Paid")p.paymentDate=today();persist();}
+function renderSalary(){const m=$("salaryMonth").value,q=$("salarySearch").value.toLowerCase(),status=$("salaryStatusFilter").value,staff=$("salaryStaffFilter").value;const rows=db.payments.filter(p=>(!m||(p.date||"").startsWith(m))&&(!status||p.status===status)&&(!staff||String(p.staffId)===staff)&&(`${p.staffName||""} ${p.note||""}`.toLowerCase().includes(q))).sort((a,b)=>(b.date||"").localeCompare(a.date||""));$("salaryRows").innerHTML=rows.length?rows.map(p=>`<tr><td>${esc(p.date)}</td><td>${esc(p.staffName||staffById(p.staffId)?.name||"Unknown")}</td><td>${money(p.income)}</td><td>${money(p.salary)}</td><td>${money(p.advance)}</td><td>${money(p.deduction)}</td><td><b>${money(net(p))}</b></td><td class="${p.status==="Paid"?"paid":"unpaid"}">${esc(p.status||"Unpaid")}</td><td><div class="actions"><button class="light" onclick="editSalary(${JSON.stringify(p.id)})">Edit</button><button class="success" onclick="markPaid(${JSON.stringify(p.id)})">${p.status==="Paid"?"Unpay":"Pay"}</button><button class="light" onclick="showReceipt(${JSON.stringify(p.id)})">Receipt</button><button class="danger" onclick="deleteSalary(${JSON.stringify(p.id)})">Delete</button></div></td></tr>`).join(""):`<tr><td colspan="9" class="empty">No salary records found</td></tr>`;}
+function renderLedger(){const id=$("ledgerStaff").value,m=$("ledgerMonth").value;const rows=db.payments.filter(p=>(!id||String(p.staffId)===id)&&(!m||(p.date||"").startsWith(m))).sort((a,b)=>(b.date||"").localeCompare(a.date||""));$("ledgerSummary").innerHTML=[["Gross salary",sum(rows,p=>Number(p.salary||0))],["Advance",sum(rows,p=>Number(p.advance||0))],["Net salary",sum(rows,net)],["Unpaid balance",sum(rows.filter(p=>p.status!=="Paid"),net)]].map(([k,v])=>`<div class="stat"><span>${k}</span><strong>${money(v)}</strong></div>`).join("");$("ledgerRows").innerHTML=rows.length?rows.map(p=>`<tr><td>${esc(p.date)}</td><td>${money(p.salary)}</td><td>${money(p.advance)}</td><td>${money(p.deduction)}</td><td>${money(net(p))}</td><td class="${p.status==="Paid"?"paid":"unpaid"}">${esc(p.status||"Unpaid")}</td><td><button class="light" onclick="showReceipt(${JSON.stringify(p.id)})">Print</button></td></tr>`).join(""):`<tr><td colspan="7" class="empty">Choose a staff member or no records match</td></tr>`;}
+function showReceipt(id){const p=db.payments.find(x=>String(x.id)===String(id));if(!p)return;document.body.classList.add("receipt-print");const s=staffById(p.staffId);$("receiptContent").innerHTML=`<div style="text-align:center;border-bottom:2px solid #111;padding-bottom:12px;margin-bottom:15px;color:#111"><h1 style="margin:0">The Jayguru Hub</h1><p>Staff Salary Payment Receipt</p></div><div style="color:#111;line-height:1.9"><p><b>Receipt ID:</b> ${esc(p.id)}<br><b>Date:</b> ${esc(p.date)}<br><b>Staff:</b> ${esc(p.staffName||s?.name||"Unknown")}<br><b>Mobile:</b> ${esc(s?.phone||"—")}</p><hr><p>Gross salary: <b>${money(p.salary)}</b><br>Advance: ${money(p.advance)}<br>Deduction: ${money(p.deduction)}<br><b>Net payable: ${money(net(p))}</b><br>Status: <b>${esc(p.status||"Unpaid")}</b><br>Payment method: ${esc(p.paymentMethod||"—")}<br>Payment date: ${esc(p.paymentDate||"—")}<br>Remarks: ${esc(p.note||"—")}</p><br><p style="display:flex;justify-content:space-between"><span>Staff signature</span><span>Authorized signature</span></p></div>`;$("receiptModal").classList.add("show");}
+function closeReceipt(){$("receiptModal").classList.remove("show");document.body.classList.remove("receipt-print");}
+function saveAttendance(){const staff=staffById($("attStaff").value),date=$("attDate").value,status=$("attStatus").value;if(!staff||!date){alert("Select staff and date.");return}const exists=extra.attendance.find(a=>String(a.staffId)===String(staff.id)&&a.date===date);if(exists){exists.status=status;exists.note=$("attNote").value.trim();}else extra.attendance.push({id:Date.now()+Math.random(),staffId:staff.id,staffName:staff.name,date,status,note:$("attNote").value.trim()});$("attNote").value="";persist();}
+function renderAttendance(){const m=$("attMonth").value,staff=$("attStaffFilter").value,status=$("attStatusFilter").value;const rows=extra.attendance.filter(a=>(!m||(a.date||"").startsWith(m))&&(!staff||String(a.staffId)===staff)&&(!status||a.status===status)).sort((a,b)=>(b.date||"").localeCompare(a.date||""));$("attendanceRows").innerHTML=rows.length?rows.map(a=>`<tr><td>${esc(a.date)}</td><td>${esc(a.staffName||staffById(a.staffId)?.name||"Unknown")}</td><td class="${a.status==="Present"?"present":a.status==="Absent"?"absent":""}">${esc(a.status)}</td><td>${esc(a.note||"—")}</td><td><button class="danger" onclick="deleteAttendance(${JSON.stringify(a.id)})">Delete</button></td></tr>`).join(""):`<tr><td colspan="5" class="empty">No attendance records</td></tr>`;}
+function deleteAttendance(id){if(confirm("Delete attendance record?")){extra.attendance=extra.attendance.filter(a=>String(a.id)!==String(id));persist();}}
+function saveTxn(){const id=$("txnEditId").value,date=$("txnDate").value,type=$("txnType").value,amount=num("txnAmount"),category=$("txnCategory").value.trim();if(!date||!category||!Number.isFinite(amount)||amount<=0){alert("Enter a date, category and amount greater than zero.");return}const x={date,type,amount,category,note:$("txnNote").value.trim()};if(id){const i=extra.transactions.findIndex(t=>String(t.id)===id);if(i<0)return;extra.transactions[i]={...extra.transactions[i],...x};}else extra.transactions.push({id:Date.now()+Math.random(),...x});resetTxnForm();persist();}
+function editTxn(id){const t=extra.transactions.find(x=>String(x.id)===String(id));if(!t)return;$("txnEditId").value=t.id;$("txnDate").value=t.date;$("txnType").value=t.type;$("txnAmount").value=t.amount;$("txnCategory").value=t.category;$("txnNote").value=t.note||"";$("txnSaveBtn").textContent="Save changes";$("txnCancel").classList.remove("hidden");showTab("business");}
+function resetTxnForm(){$("txnEditId").value="";$("txnDate").value=today();$("txnType").value="Income";$("txnAmount").value="";$("txnCategory").value="";$("txnNote").value="";$("txnSaveBtn").textContent="Save transaction";$("txnCancel").classList.add("hidden");}
+function deleteTxn(id){if(confirm("Delete this transaction?")){extra.transactions=extra.transactions.filter(t=>String(t.id)!==String(id));persist();}}
+function renderTransactions(){const m=$("txnMonth").value,type=$("txnTypeFilter").value,rows=extra.transactions.filter(t=>(!m||(t.date||"").startsWith(m))&&(!type||t.type===type)).sort((a,b)=>(b.date||"").localeCompare(a.date||""));const inc=sum(rows.filter(t=>t.type==="Income"),t=>Number(t.amount)),exp=sum(rows.filter(t=>t.type==="Expense"),t=>Number(t.amount));$("txnIncomeTotal").textContent=money(inc);$("txnExpenseTotal").textContent=money(exp);$("txnNetTotal").textContent=money(inc-exp);$("txnRows").innerHTML=rows.length?rows.map(t=>`<tr><td>${esc(t.date)}</td><td>${esc(t.type)}</td><td>${esc(t.category)}</td><td>${esc(t.note||"—")}</td><td>${money(t.amount)}</td><td><div class="actions"><button class="light" onclick="editTxn(${JSON.stringify(t.id)})">Edit</button><button class="danger" onclick="deleteTxn(${JSON.stringify(t.id)})">Delete</button></div></td></tr>`).join(""):`<tr><td colspan="6" class="empty">No transactions found</td></tr>`;}
+function periodFilter(date,mode){return mode==="year"?(date||"").slice(0,4)===$("reportYear").value:(date||"").startsWith($("reportMonth").value)}
+function reportRows(){const mode=$("reportMode").value;return {p:db.payments.filter(p=>periodFilter(p.date,mode)),t:extra.transactions.filter(t=>periodFilter(t.date,mode))};}
+function renderReports(){if(!$("reportMonth").value)$("reportMonth").value=monthNow();if(!$("reportYear").value)$("reportYear").value=String(new Date().getFullYear());const {p,t}=reportRows(),gross=sum(p,x=>Number(x.salary||0)),paid=sum(p.filter(x=>x.status==="Paid"),net),unpaid=sum(p.filter(x=>x.status!=="Paid"),net),inc=sum(t.filter(x=>x.type==="Income"),x=>Number(x.amount)),exp=sum(t.filter(x=>x.type==="Expense"),x=>Number(x.amount));$("rGross").textContent=money(gross);$("rPaid").textContent=money(paid);$("rUnpaid").textContent=money(unpaid);$("rIncome").textContent=money(inc);$("rExpense").textContent=money(exp);$("rNet").textContent=money(inc-exp);}
+function printReport(){renderReports();document.body.classList.add("report-print");window.print();setTimeout(()=>document.body.classList.remove("report-print"),500);}
+function exportReportCSV(){const {p,t}=reportRows(),rows=[["Type","Date","Staff/Category","Gross/Amount","Advance","Deduction","Net/Status"],...p.map(x=>["Salary",x.date,x.staffName,x.salary,x.advance,x.deduction,net(x),x.status]),...t.map(x=>[x.type,x.date,x.category,x.amount,"","","",""])];downloadCSV(rows,"Jayguru-report.csv");}
+function downloadCSV(rows,name){const csv=rows.map(r=>r.map(v=>'"'+String(v??"").replace(/"/g,'""')+'"').join(",")).join("\r\n");const blob=new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+function backupData(){const payload={app:"The Jayguru Hub",version:2,exportedAt:new Date().toISOString(),legacy:db,extra,theme:localStorage.getItem(THEME)||"light"};const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="Jayguru-Hub-Backup-"+today()+".json";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+function restoreData(e){const file=e.target.files[0];if(!file)return;if(!confirm("Restore this backup? Current staff, salary, attendance and transaction records will be replaced.")){e.target.value="";return}const reader=new FileReader();reader.onload=()=>{try{const x=JSON.parse(reader.result),legacy=x.legacy||x;if(!Array.isArray(legacy.staff)||!Array.isArray(legacy.payments))throw Error("Invalid backup format");db={staff:legacy.staff,payments:legacy.payments};extra={attendance:Array.isArray(x.extra?.attendance)?x.extra.attendance:[],transactions:Array.isArray(x.extra?.transactions)?x.extra.transactions:[]};persist();alert("Backup restored successfully.");}catch(err){alert("Restore failed: "+err.message)}e.target.value="";};reader.onerror=()=>alert("Could not read backup file.");reader.readAsText(file);}
+function clearAllData(){if(!confirm("This permanently deletes ALL Jayguru Hub data from this browser. Continue?"))return;if(!confirm("Final confirmation: download a backup first if you may need these records."))return;localStorage.removeItem(KEY);localStorage.removeItem(EXTRA);loadData();persist();alert("App records cleared.");}
+function toggleTheme(){const next=document.documentElement.dataset.theme==="dark"?"light":"dark";document.documentElement.dataset.theme=next;localStorage.setItem(THEME,next);$("themeBtn").textContent=next==="dark"?"☀ Light mode":"🌙 Dark mode";}
+function applyTheme(){const t=localStorage.getItem(THEME)||"light";document.documentElement.dataset.theme=t;$("themeBtn").textContent=t==="dark"?"☀ Light mode":"🌙 Dark mode";}
+async function hashPassword(p){const bytes=new TextEncoder().encode(p),digest=await crypto.subtle.digest("SHA-256",bytes);return Array.from(new Uint8Array(digest)).map(b=>b.toString(16).padStart(2,"0")).join("");}
+function authSetup(){const exists=!!localStorage.getItem(AUTH);$("authIntro").textContent=exists?"Enter your admin password to unlock the dashboard.":"Set an admin password to protect this dashboard on this device.";$("passwordLabel").textContent=exists?"Admin password":"Create password";$("authSubmit").textContent=exists?"Unlock dashboard":"Set password";$("confirmWrap").classList.toggle("hidden",exists);$("authConfirm").required=!exists;}
+$("authForm").addEventListener("submit",async e=>{e.preventDefault();const p=$("authPassword").value;if(p.length<6){alert("Password must be at least 6 characters.");return}const saved=localStorage.getItem(AUTH);if(saved){if(await hashPassword(p)!==saved){alert("Incorrect password.");return}}else{if(p!==$("authConfirm").value){alert("Passwords do not match.");return}localStorage.setItem(AUTH,await hashPassword(p));}unlockApp();});
+function unlockApp(){$("authScreen").classList.add("hidden");$("app").classList.remove("hidden");$("authPassword").value="";$("authConfirm").value="";loadData();applyTheme();renderAll();}
+function lockApp(){$("app").classList.add("hidden");$("authScreen").classList.remove("hidden");authSetup();}
+async function changePassword(){const old=$("oldPassword").value,n=$("newPassword").value,n2=$("newPassword2").value;if(!old||!n){alert("Enter current and new password.");return}if(await hashPassword(old)!==localStorage.getItem(AUTH)){alert("Current password is incorrect.");return}if(n.length<6){alert("New password must be at least 6 characters.");return}if(n!==n2){alert("New passwords do not match.");return}localStorage.setItem(AUTH,await hashPassword(n));$("oldPassword").value=$("newPassword").value=$("newPassword2").value="";alert("Password changed.");}
+$("salaryMonth").value=monthNow();$("ledgerMonth").value=monthNow();$("attDate").value=today();$("attMonth").value=monthNow();$("txnDate").value=today();$("txnMonth").value=monthNow();$("reportMonth").value=monthNow();$("reportYear").value=String(new Date().getFullYear());
+authSetup();if(localStorage.getItem(AUTH)){$("authIntro").textContent="Enter your admin password to unlock the dashboard.";}else{$("authIntro").textContent="First-time setup: create a password. Your existing records will be retained.";}
 </script>
-
 </body>
 </html>
