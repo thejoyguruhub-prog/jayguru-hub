@@ -86,6 +86,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:15px}
     <div class="auth-password-wrap"><input id="authPassword" type="password" minlength="6" autocomplete="current-password" required placeholder="Enter your password"><button class="auth-eye" type="button" onclick="toggleAuthPassword('authPassword',this)">Show</button></div>
     <div id="confirmWrap"><label for="authConfirm">Confirm password</label><div class="auth-password-wrap"><input id="authConfirm" type="password" minlength="6" autocomplete="new-password" placeholder="Re-enter your password"><button class="auth-eye" type="button" onclick="toggleAuthPassword('authConfirm',this)">Show</button></div></div>
     <button type="submit" class="auth-submit" id="authSubmit">Sign in to dashboard</button>
+    <p id="authStatus" role="status" aria-live="polite" style="display:none;margin:12px 0 0;padding:10px 12px;border-radius:9px;background:#fee2e2;color:#991b1b;font-size:13px"></p>
    </form>
    <p class="notice">Your password protects this dashboard on this device. This is local device-level protection, not server-grade security; it does not protect data from someone with access to browser developer tools or this device.</p>
    <div class="auth-secure">▣ &nbsp; Local device protection &nbsp; · &nbsp; Your records stay in this browser</div>
@@ -228,36 +229,41 @@ function toggleAuthTheme(){const next=document.documentElement.dataset.theme==="
 function updateAuthThemeButton(){const dark=document.documentElement.dataset.theme==="dark";const label=dark?"☀ Light mode":"🌙 Dark mode";if($("authThemeBtn"))$("authThemeBtn").textContent=label;if($("themeBtn"))$("themeBtn").textContent=label;}
 $("authForm").addEventListener("submit",async e=>{
  e.preventDefault();
- const submit=$("authSubmit");
+ const submit=$("authSubmit"), status=$("authStatus");
+ const showError=message=>{if(status){status.textContent=message;status.style.display="block";}else alert(message);};
+ if(status){status.textContent="";status.style.display="none";}
  const id=$("adminId").value.trim(),p=$("authPassword").value;
- if(!id){alert("Enter your Admin ID.");$("adminId").focus();return}
- if(!p){alert("Enter your password.");$("authPassword").focus();return}
- if(p.length<6){alert("Password must be at least 6 characters.");$("authPassword").focus();return}
- submit.disabled=true; const originalLabel=submit.textContent; submit.textContent="Please wait…";
+ if(!id){showError("Enter your Admin ID.");$("adminId").focus();return;}
+ if(!p){showError("Enter your password.");$("authPassword").focus();return;}
+ if(p.length<6){showError("Password must be at least 6 characters.");$("authPassword").focus();return;}
+ const originalLabel=submit.textContent;
+ submit.disabled=true;submit.textContent="Checking login…";
  try {
   const saved=localStorage.getItem(AUTH);
-  if(saved){
-   const savedId=localStorage.getItem(ADMIN_ID)||"admin";
-   if(id!==savedId){alert("Incorrect Admin ID.");$("adminId").focus();return}
-   if(await hashPassword(p)!==saved){alert("Incorrect password.");$("authPassword").focus();return}
-  }else{
-   if(!$("authConfirm").value){alert("Confirm your password.");$("authConfirm").focus();return}
-   if(p!==$("authConfirm").value){alert("Passwords do not match.");$("authConfirm").focus();return}
+  if(!saved){
+   if(!( $("authConfirm").value ).value){showError("Create your admin account first by entering and confirming a password.");return;}
+   if(p!==$("authConfirm").value){showError("Passwords do not match.");$("authConfirm").focus();return;}
    const passwordHash=await hashPassword(p);
-   // Save and verify both values before changing the screen.
-   localStorage.setItem(ADMIN_ID,id);
-   localStorage.setItem(AUTH,passwordHash);
-   if(localStorage.getItem(ADMIN_ID)!==id || localStorage.getItem(AUTH)!==passwordHash) throw new Error("Browser storage did not save the admin details. Enable site storage and try again.");
+   localStorage.setItem(ADMIN_ID,id);localStorage.setItem(AUTH,passwordHash);
+   if(localStorage.getItem(ADMIN_ID)!==id||localStorage.getItem(AUTH)!==passwordHash)throw new Error("Browser storage could not save your admin details. Allow site storage and try again.");
+  } else {
+   const savedId=localStorage.getItem(ADMIN_ID)||"admin";
+   if(id!==savedId){showError("Admin ID does not match the ID saved on this device.");$("adminId").focus();return;}
+   const enteredHash=await hashPassword(p);
+   if(enteredHash!==saved){showError("Password is incorrect. Use the exact password you created on this device.");$("authPassword").focus();return;}
   }
   recordSuccessfulLogin(id);
-  authSetup();
-  unlockApp();
+  // Switch screens before loading dashboard data so a rendering issue cannot leave the login form visible.
+  $("authScreen").classList.add("hidden");
+  $("app").classList.remove("hidden");
+  $("authPassword").value="";$("authConfirm").value="";
+  try { loadData();applyTheme();renderAll(); }
+  catch(renderError){console.error("Dashboard rendering error:",renderError);alert("Login successful, but the dashboard had a display error: "+(renderError.message||renderError));}
  } catch(err) {
   console.error("Jayguru Hub login error:",err);
-  alert("Could not complete admin setup/login: " + (err && err.message ? err.message : "Please allow browser storage and try again."));
+  showError("Login could not finish: "+(err&&err.message?err.message:"Please check browser storage and try again."));
  } finally {
-  submit.disabled=false;
-  submit.textContent=originalLabel;
+  submit.disabled=false;submit.textContent=originalLabel;
  }
 });
 
