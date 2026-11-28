@@ -222,7 +222,11 @@ async function restoreData(e){const file=e.target.files[0];if(!file)return;if(!a
 async function clearAllData(){if(!await confirmAdminPassword("delete all app data"))return;if(!confirm("This permanently deletes ALL Jayguru Hub data from this browser. Continue?"))return;if(!confirm("Final confirmation: download a backup first if you may need these records."))return;localStorage.removeItem(KEY);localStorage.removeItem(EXTRA);loadData();persist();alert("App records cleared.");}
 function toggleTheme(){const next=document.documentElement.dataset.theme==="dark"?"light":"dark";document.documentElement.dataset.theme=next;localStorage.setItem(THEME,next);updateAuthThemeButton();}
 function applyTheme(){const t=localStorage.getItem(THEME)||"light";document.documentElement.dataset.theme=t;updateAuthThemeButton();}
-async function hashPassword(p){const bytes=new TextEncoder().encode(p),digest=await crypto.subtle.digest("SHA-256",bytes);return Array.from(new Uint8Array(digest)).map(b=>b.toString(16).padStart(2,"0")).join("");}
+async function hashPassword(p){
+ if(!window.crypto||!window.crypto.subtle||typeof TextEncoder==="undefined")throw new Error("Secure password hashing is unavailable. Open this page using your HTTPS GitHub Pages link, not a file:// address.");
+ const bytes=new TextEncoder().encode(p),digest=await window.crypto.subtle.digest("SHA-256",bytes);
+ return Array.from(new Uint8Array(digest)).map(b=>b.toString(16).padStart(2,"0")).join("");
+}
 function authSetup(){const exists=!!localStorage.getItem(AUTH);const idField=$("adminId");$("authIntro").textContent=exists?"Enter your Admin ID and password to continue to your management workspace.":"Create your Admin ID and password to secure your private dashboard.";$("authHeading").textContent=exists?"Welcome back":"Create admin access";$("passwordLabel").textContent=exists?"Admin password":"Create password";$("authPassword").placeholder=exists?"Enter your password":"Create a password (minimum 6 characters)";$("authSubmit").textContent=exists?"Sign in to dashboard":"Create admin account";$("confirmWrap").classList.toggle("hidden",exists);$("authConfirm").required=!exists;idField.value=exists?(localStorage.getItem(ADMIN_ID)||"admin"):"";idField.readOnly=false;idField.placeholder=exists?"Enter or change your Admin ID":"Create an Admin ID (e.g. admin)";}
 function toggleAuthPassword(id,button){const field=$(id);const show=field.type==="password";field.type=show?"text":"password";button.textContent=show?"Hide":"Show";}
 function toggleAuthTheme(){const next=document.documentElement.dataset.theme==="dark"?"light":"dark";document.documentElement.dataset.theme=next;localStorage.setItem(THEME,next);updateAuthThemeButton();}
@@ -241,16 +245,16 @@ $("authForm").addEventListener("submit",async e=>{
  try {
   const saved=localStorage.getItem(AUTH);
   if(!saved){
-   if(!( $("authConfirm").value ).value){showError("Create your admin account first by entering and confirming a password.");return;}
+   if(!$("authConfirm").value){showError("Create your admin account first by entering and confirming a password.");$("authConfirm").focus();return;}
    if(p!==$("authConfirm").value){showError("Passwords do not match.");$("authConfirm").focus();return;}
    const passwordHash=await hashPassword(p);
    localStorage.setItem(ADMIN_ID,id);localStorage.setItem(AUTH,passwordHash);
    if(localStorage.getItem(ADMIN_ID)!==id||localStorage.getItem(AUTH)!==passwordHash)throw new Error("Browser storage could not save your admin details. Allow site storage and try again.");
   } else {
    const savedId=localStorage.getItem(ADMIN_ID)||"admin";
-   if(id!==savedId){showError("Admin ID does not match the ID saved on this device.");$("adminId").focus();return;}
+   if(id!==savedId){showError("Admin ID does not match the ID saved on this device. Check the exact ID you created.");$("adminId").focus();return;}
    const enteredHash=await hashPassword(p);
-   if(enteredHash!==saved){showError("Password is incorrect. Use the exact password you created on this device.");$("authPassword").focus();return;}
+   if(enteredHash!==saved){showError("Password is incorrect. Check the password you created on this device.");$("authPassword").focus();return;}
   }
   recordSuccessfulLogin(id);
   // Switch screens before loading dashboard data so a rendering issue cannot leave the login form visible.
